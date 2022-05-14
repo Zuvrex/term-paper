@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>AVL</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="AVL.js" defer></script>
+    <script src="schemas.js" defer></script>
+    <script src="graphs.js" defer></script>
+</head>
+<body>
+    <canvas id="AVL_canvas" width="900" height="600"></canvas>
+    <canvas id="c2" width="250" height="250"></canvas>
+    <canvas id="c3" width="250" height="250"></canvas>
+    <canvas id="graph_canvas" width="500" height="250"></canvas>
+    <div id="tree_methods2">
+        <p>
+            insert <input type="text" id="insert">
+        </p>
+        <p>
+            remove <input type="text" id="remove">
+        </p>
+    </div>
+    <div id="clear">
+        <p>
+            <button onclick="clear_canvas()">Очистить</button>
+        </p>
+    </div>
+    <div id="speed">
+        <p>
+            скорость анимации
+        </p>
+        <p>
+            <input type="range" min="-15" max="15" value="0" class="slider" id="range">
+        </p>
+    </div>
+    <div id="tree_methods1">
+        <p>
+            build <input type="text" id="build">
+        </p>
+        <p>
+            search <input type="text" id="search">
+        </p>
+    </div>
+    <div id="schema">
+        <p>
+            Количество элементов <input type="text" id="n_node" oninput="draw_schemas()">
+        </p>
+        <p>
+            Количесво перестановок <input type="number" id="n_perm" oninput="draw_schemas()">
+        </p>
+    </div>
+<!--    <button onclick="backward()">Назад</button>-->
+<!--    <button onclick="forward()">Вперед</button>-->
+</body>
+</html>

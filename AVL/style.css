@@ -1,0 +1,61 @@
+#AVL_canvas {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 900px;
+    height: 600px;
+    border: 1px solid #000000;
+    margin: 40px;
+}
+#c2 {
+    position: absolute;
+    left: 920px;
+    top: 10px;
+    width: 250px;
+    height: 250px;
+    border: 1px solid #000000;
+    margin: 40px;
+}
+#c3 {
+    position: absolute;
+    left: 1171px;
+    top: 10px;
+    width: 250px;
+    height: 250px;
+    border: 1px solid #000000;
+    margin: 40px;
+}
+#graph_canvas {
+    position: absolute;
+    left: 920px;
+    top: 360px;
+    width: 500px;
+    height: 250px;
+    border: 1px solid #000000;
+    margin: 40px;
+}
+#tree_methods1 {
+    position: absolute;
+    left: 60px;
+    top: 650px;
+}
+#tree_methods2 {
+    position: absolute;
+    left: 320px;
+    top: 650px;
+}
+#speed {
+    position: absolute;
+    left: 770px;
+    top: 650px;
+}
+#clear {
+    position: absolute;
+    left: 620px;
+    top: 650px;
+}
+#schema {
+    position: absolute;
+    left: 970px;
+    top: 305px;
+}
