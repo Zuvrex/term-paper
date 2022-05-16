@@ -577,11 +577,17 @@ function remove_node(params) {
             node.right.parent = node.parent
             node.right.side = side
             objects.delete(node)
+            objects.delete(node.value_img)
+            objects.delete(node.depth_img)
+            objects.delete(node.edge_img)
             node = node.right
         } else {
             node.parent.left = node.left
             node.left.parent = node.parent
             objects.delete(node)
+            objects.delete(node.value_img)
+            objects.delete(node.depth_img)
+            objects.delete(node.edge_img)
             if (node.left.value !== null) {
                 node = node.left
             } else {
@@ -594,11 +600,17 @@ function remove_node(params) {
             node.left.parent = node.parent
             node.left.side = side
             objects.delete(node)
+            objects.delete(node.value_img)
+            objects.delete(node.depth_img)
+            objects.delete(node.edge_img)
             node = node.left
         } else {
             node.parent.right = node.right
             node.right.parent = node.parent
             objects.delete(node)
+            objects.delete(node.value_img)
+            objects.delete(node.depth_img)
+            objects.delete(node.edge_img)
             if (node.right.value !== null) {
                 node = node.right
             } else {
@@ -609,7 +621,11 @@ function remove_node(params) {
         node.value = null
         node.left = null
         node.right = null
+        node.depth = 0
         objects.delete(node)
+        objects.delete(node.value_img)
+        objects.delete(node.depth_img)
+        objects.delete(node.edge_img)
         node = node.parent
     }
     tree_img.add_target()
@@ -1054,52 +1070,6 @@ class AVL {
             node = node.parent
         }
     }
-
-    // find_min(node) {
-    //     if (node.depth === 1) {
-    //         return node
-    //     }
-    //     return this.find_min(node.left)
-    // }
-    //
-    // find_max(node) {
-    //     if (node.depth === 1) {
-    //         return node
-    //     }
-    //     return this.find_min(node.right)
-    // }
-
-    // remove(value) {
-    //     let node = this.search(value)
-    //     if (node === null) {
-    //         return
-    //     }
-    //
-    //     this.size -= 1
-    //     if (node.right.value === null) {
-    //         node.left.parent = node.parent
-    //         node.parent.right = node.left
-    //         if (node === this.root) {
-    //             this.root = node.left
-    //         } node = node.left
-    //     } else {
-    //         let min = this.find_min(node.right)
-    //         node.value = min.value
-    //         min.right.parent = min.parent
-    //         if (min === node.right) {
-    //             min.parent.right = min.right
-    //         } else {
-    //             min.parent.left = min.right
-    //         } node = min
-    //     }
-    //
-    //
-    //     while (node.parent !== null) {
-    //         node = node.parent
-    //         this.count_depth(node)
-    //         this.balancing(node)
-    //     }
-    // }
 }
 
 
@@ -1148,40 +1118,15 @@ slider.oninput = function() {
     speed_controller = this.value;
 }
 
-function on_off() {
-    let btn = document.getElementById("b1")
-    if (df === draw_frame) {
-        tree_img.extra_value.update({x: {ext: -1000}, y: {ext: -1000}, t_x: {ext: -1000}, t_y: {ext: -1000}})
-        tree_img.extra_depth1.update({x: {ext: -1000}, y: {ext: -1000}, t_x: {ext: -1000}, t_y: {ext: -1000}})
-        tree_img.extra_depth2.update({x: {ext: -1000}, y: {ext: -1000}, t_x: {ext: -1000}, t_y: {ext: -1000}})
-        df = draw_frame_no_animations
-        btn.innerHTML = 'Вкл. анимацию'
+function pause() {
+    let btn = document.getElementById("pause")
+    if (btn.innerHTML === 'II') {
+        clearInterval(interval)
+        btn.innerHTML = '▶'
     } else {
-        df = draw_frame
-        btn.innerHTML = 'Выкл. анимацию'
+        interval = setInterval(df, timeout)
+        btn.innerHTML = 'II'
     }
-    clearInterval(interval)
-    interval = setInterval(df, timeout)
-}
-
-function forward() {
-    clearInterval(interval)
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    if (img_index < images.length - 1) {
-        img_index += 1
-    }
-    img.src = images[img_index]
-    ctx.drawImage(img, 0, 0)
-}
-
-function backward() {
-    clearInterval(interval)
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    if (img_index > 0) {
-        img_index -= 1
-    }
-    img.src = images[img_index]
-    ctx.drawImage(img, 0, 0)
 }
 
 function clear_canvas() {
@@ -1217,52 +1162,3 @@ window.addEventListener("keyup", function(e) {
         }
     }
 })
-
-// on_off()
-// functions.push({f: avl.insert, args: {value: 4, obj: avl}})
-// functions.push({f: avl.insert, args: {value: 2, obj: avl}})
-// functions.push({f: avl.insert, args: {value: 7, obj: avl}})
-// functions.push({f: avl.insert, args: {value: 1, obj: avl}})
-// functions.push({f: avl.insert, args: {value: 3, obj: avl}})
-// functions.push({f: avl.insert, args: {value: 5, obj: avl}})
-// functions.push({f: avl.insert, args: {value: 8, obj: avl}})
-// functions.push({f: avl.insert, args: {value: 6, obj: avl}})
-// functions.push({f: avl.remove, args: {value: 4, obj: avl}})
-
-// b.insert(13)
-// b.insert(29)
-// b.insert(97)
-// b.insert(82)
-// b.insert(1)
-// b.insert(60)
-// b.insert(69)
-// b.insert(27)
-// b.insert(47)
-// b.insert(28)
-
-// b.remove(13)
-// b.remove(97)
-// b.remove(27)
-// b.remove(60)
-// b.remove(82)
-// b.remove(1)
-//
-// b.insert(57)
-// b.insert(56)
-// b.insert(35)
-// b.insert(84)
-// b.insert(10)
-// b.insert(20)
-// b.insert(40)
-// b.insert(11)
-// b.insert(8)
-// b.insert(59)
-//
-// b.remove(69)
-// b.remove(10)
-// b.remove(8)
-// b.remove(29)
-// b.remove(40)
-// b.remove(35)
-
-// let c = b.traversal()
