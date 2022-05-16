@@ -74,14 +74,14 @@ function graph() {
 
     ctx_g.clearRect(0, 0, width_g, height_g)
 
-    ctx_g.beginPath()
-    ctx_g.lineWidth = 2
-    ctx_g.strokeStyle = 'green'
-    ctx_g.moveTo(canvas_x(0), canvas_y(0))
-    for (let i = 1; i < graph_sz; ++i) {
-        draw_point(canvas_x(x[i]), canvas_y(x[i]))
-    }
-    ctx_g.stroke()
+    // ctx_g.beginPath()
+    // ctx_g.lineWidth = 2
+    // ctx_g.strokeStyle = 'green'
+    // ctx_g.moveTo(canvas_x(0), canvas_y(0))
+    // for (let i = 1; i < graph_sz; ++i) {
+    //     draw_point(canvas_x(x[i]), canvas_y(x[i]))
+    // }
+    // ctx_g.stroke()
 
     ctx_g.beginPath()
     ctx_g.lineWidth = 2
