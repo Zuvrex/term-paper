@@ -921,6 +921,16 @@ class AVL {
             }
         }
         remove_extra(tree_img.extra_value)
+        if (node.value === null) {
+            while (node !== null) {
+                sequence.push(new Set([
+                    {obj: node.image, args: {colour: {ext: 'blue'}}}
+                ]))
+                t.push(0)
+                node = node.parent
+            }
+            return
+        }
 
         let deleted = node
         if (node.left.depth === 0 && node.right.depth === 0) {
@@ -1057,7 +1067,7 @@ class AVL {
                     t.push(0)
                     node = node.parent
                 }
-                break;
+                break
             }
         }
         remove_extra(tree_img.extra_value)
@@ -1084,7 +1094,9 @@ function create_tree() {
     let values = document.getElementById('build').value.split(' ')
     document.getElementById('build').value = ''
     for (let val of values) {
-        functions.push({f: avl.insert, args: {value: parseInt(val), obj: avl}})
+        if (parseInt(val) < 101 && parseInt(val) > -1) {
+            functions.push({f: avl.insert, args: {value: parseInt(val), obj: avl}})
+        }
     }
     df = draw_frame
 }
@@ -1094,7 +1106,9 @@ function insert_value() {
     interval = setInterval(df, timeout)
     let val = document.getElementById('insert').value
     document.getElementById('insert').value = ''
-    functions.push({f: avl.insert, args: {value: parseInt(val), obj: avl}})
+    if (parseInt(val) < 101 && parseInt(val) > -1) {
+        functions.push({f: avl.insert, args: {value: parseInt(val), obj: avl}})
+    }
 }
 
 function remove_value() {
@@ -1102,7 +1116,9 @@ function remove_value() {
     interval = setInterval(df, timeout)
     let val = document.getElementById('remove').value
     document.getElementById('remove').value = ''
-    functions.push({f: avl.remove, args: {value: parseInt(val), obj: avl}})
+    if (parseInt(val) < 101 && parseInt(val) > -1) {
+        functions.push({f: avl.remove, args: {value: parseInt(val), obj: avl}})
+    }
 }
 
 function search_value() {
@@ -1110,7 +1126,9 @@ function search_value() {
     interval = setInterval(df, timeout)
     let val = document.getElementById('search').value
     document.getElementById('search').value = ''
-    functions.push({f: avl.search, args: {value: parseInt(val), obj: avl}})
+    if (parseInt(val) < 101 && parseInt(val) > -1) {
+        functions.push({f: avl.search, args: {value: parseInt(val), obj: avl}})
+    }
 }
 
 let slider = document.getElementById("range")

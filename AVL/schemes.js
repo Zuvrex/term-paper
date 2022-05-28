@@ -26,13 +26,14 @@ class Node_schema {
 
 
 class Tree_schema {
-    constructor() {
+    constructor(colour='black') {
         this.root = new Node_schema(null, null, null, null, null)
         this.size = 0
         this.max_x = 0
         this.max_y = 0
         this.n_leafs = 0
         this.sum = 0
+        this.colour = colour
     }
 
     count_depth(node) {
@@ -65,16 +66,16 @@ class Tree_schema {
         this.draw(context, w, h, node.left)
         this.draw(context, w, h, node.right)
         context.beginPath()
-        context.fillStyle = 'black'
-        context.arc(ind + node.x * (w - 2 * ind) / this.max_x, ind + node.y * (h - 2 * ind) / this.max_y, 4 / Math.log2(this.size), 0, 2 * Math.PI)
+        context.lineWidth = 4 / Math.log2(this.size)
+        context.fillStyle = this.colour
+        context.arc(ind + node.x * (w - 2 * ind) / this.max_x, ind + 5 + node.y * (h - 2 * ind) / this.max_y, context.lineWidth, 0, 2 * Math.PI)
         context.stroke()
         context.fill()
         if (node.parent !== null) {
             context.beginPath()
-            context.lineWidth = 4 / Math.log2(this.size)
-            context.strokeStyle = 'black'
-            context.moveTo(ind + node.x * (w - 2 * ind) / this.max_x, ind + node.y * (h - 2 * ind) / this.max_y)
-            context.lineTo(ind + node.parent.x * (w - 2 * ind) / this.max_x, ind + node.parent.y * (h - 2 * ind) / this.max_y)
+            context.strokeStyle = this.colour
+            context.moveTo(ind + node.x * (w - 2 * ind) / this.max_x, ind + 5 + node.y * (h - 2 * ind) / this.max_y)
+            context.lineTo(ind + node.parent.x * (w - 2 * ind) / this.max_x, ind + 5 + node.parent.y * (h - 2 * ind) / this.max_y)
             context.stroke()
         }
     }
@@ -234,8 +235,8 @@ function create_schema(num=null) {
         shuffle(array)
     }
 
-    let tree_b = new Balanced()
-    let tree_u = new Unbalanced()
+    let tree_b = new Balanced('red')
+    let tree_u = new Unbalanced('blue')
 
     for (let val of array) {
         tree_b.insert(val)
@@ -252,6 +253,18 @@ function draw_schemas() {
 
     ctx1.clearRect(0, 0, width1, height1)
     ctx2.clearRect(0, 0, width2, height2)
+
+    ctx1.fillStyle = 'black'
+    ctx1.textBaseline = "top"
+    ctx1.textAlign = "end"
+    ctx1.font = '15px Arial'
+    ctx1.fillText('AVL', width1 - ind, 10)
+
+    ctx2.fillStyle = 'black'
+    ctx2.textBaseline = "top"
+    ctx2.textAlign = "end"
+    ctx2.font = '15px Arial'
+    ctx2.fillText('unbalanced', width2 - ind, 10)
 
     let trees = create_schema()
     trees[0].draw(ctx1, width1, height1)
@@ -271,3 +284,15 @@ function draw_schemas() {
     ctx2.fillText('mean: ' + (trees[1].sum / trees[1].n_leafs).toFixed(2), 10, 10)
     ctx2.fillText('max: ' + trees[1].root.depth, 10, 20)
 }
+
+ctx1.fillStyle = 'black'
+ctx1.textBaseline = "top"
+ctx1.textAlign = "end"
+ctx1.font = '15px Arial'
+ctx1.fillText('AVL', width1 - ind, 10)
+
+ctx2.fillStyle = 'black'
+ctx2.textBaseline = "top"
+ctx2.textAlign = "end"
+ctx2.font = '15px Arial'
+ctx2.fillText('unbalanced', width2 - ind, 10)
