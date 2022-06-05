@@ -7,7 +7,7 @@
     border: 1px solid #000000;
     margin: 40px;
 }
-#c2 {
+#canvas_b {
     position: absolute;
     left: 920px;
     top: 10px;
@@ -16,7 +16,7 @@
     border: 1px solid #000000;
     margin: 40px;
 }
-#c3 {
+#canvas_u {
     position: absolute;
     left: 1171px;
     top: 10px;
@@ -54,7 +54,7 @@
     left: 620px;
     top: 650px;
 }
-#schema {
+#scheme {
     position: absolute;
     left: 970px;
     top: 305px;

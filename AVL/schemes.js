@@ -1,9 +1,9 @@
-let sch_b = document.getElementById('c2')
+let sch_b = document.getElementById('canvas_b')
 let ctx_b = sch_b.getContext('2d')
 const width_b = sch_b.width
 const height_b = sch_b.height
 
-let sch_u = document.getElementById('c3')
+let sch_u = document.getElementById('canvas_u')
 let ctx_u = sch_u.getContext('2d')
 const width_u = sch_u.width
 const height_u = sch_u.height

@@ -840,8 +840,6 @@ class AVL {
                 {obj: tree_img.extra_value, args: {t_x: node.image.x, t_y: node.image.y}},
             ]))
             t.push(n_steps)
-            // sequence.push(new Set([{obj: node.image, args: {t_r: 2 * node_r}}]))
-            // t.push(10)
             if (node.value > value) {
                 comparsion(node, value, '<')
                 node = node.left
@@ -859,8 +857,6 @@ class AVL {
                 }
                 return
             }
-            // sequence.push(new Set([{obj: node.parent.image, args: {t_r: node_r}}]))
-            // t.push(10)
         }
         remove_extra(tree_img.extra_value)
 
@@ -887,9 +883,6 @@ class AVL {
             ]))
             t.push(0)
             node = node.parent
-            // ...................................
-            // this.new_target()
-            // objects = [new tree_image(this.root)]
         }
     }
 
@@ -1047,8 +1040,6 @@ class AVL {
                 {obj: tree_img.extra_value, args: {t_x: node.image.x, t_y: node.image.y}},
             ]))
             t.push(n_steps)
-            // sequence.push(new Set([{obj: node.image, args: {t_r: 2 * node_r}}]))
-            // t.push(10)
             if (node.value > value) {
                 comparsion(node, value, '<')
                 node = node.left
