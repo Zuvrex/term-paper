@@ -11,9 +11,6 @@ const ind_b = 20
 const graph_sz = 100
 const sample_sz = 100
 
-function draw_point(x, y) {
-    ctx_g.lineTo(x, y)
-}
 
 function canvas_x(x) {
     return ind + ind_l + x * (width_g - 2 * ind - ind_l) / graph_sz
@@ -103,7 +100,7 @@ function graph() {
         let sum_b = 0
         let sum_u = 0
         for (let j = 0; j <= sample_sz; ++j) {
-            let trees = create_schema(i)
+            let trees = create_scheme(i)
             sum_b += trees[0].sum / trees[0].n_leafs
             sum_u += trees[1].sum / trees[1].n_leafs
         }
@@ -127,7 +124,7 @@ function graph() {
     ctx_g.strokeStyle = 'red'
     ctx_g.moveTo(canvas_x(0), canvas_y(0))
     for (let i = 1; i < graph_sz; ++i) {
-        draw_point(canvas_x(x[i]), canvas_y(y_b[i]))
+        ctx_g.lineTo(canvas_x(x[i]), canvas_y(y_b[i]))
     }
     ctx_g.stroke()
 
@@ -136,7 +133,7 @@ function graph() {
     ctx_g.strokeStyle = 'blue'
     ctx_g.moveTo(canvas_x(0), canvas_y(0))
     for (let i = 1; i < graph_sz; ++i) {
-        draw_point(canvas_x(x[i]), canvas_y(y_u[i]))
+        ctx_g.lineTo(canvas_x(x[i]), canvas_y(y_u[i]))
     }
     ctx_g.stroke()
 

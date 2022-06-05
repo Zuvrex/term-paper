@@ -8,7 +8,7 @@ const node_r = 20
 const dist_x = 40
 const dist_y = 100
 
-const speed = 20
+const n_steps = 20
 let speed_controller = 0
 
 let t = [0]
@@ -106,7 +106,7 @@ class tree_image {
             return x
         }
         x = this.update(node.left, x, y + dist_y)
-        sequence[sequence.length - 1].add({obj: node.image, args: {t_x: {ext: x}, t_y: {ext: y}, t_r: {ext: node_r}}})
+        sequence[sequence.length - 1].add({obj: node.image, args: {t_x: {val: x}, t_y: {val: y}, t_r: {val: node_r}}})
         // node.image.set_target(x, y, 20)
         x += dist_x
         x = this.update(node.right, x, y + dist_y)
@@ -119,34 +119,34 @@ class tree_image {
         }
         x = this.update_all(node.left, x, y + dist_y)
 
-        node.image.x = {ext: x}
-        node.image.y = {ext: y}
-        node.image.r = {ext: 0}
-        node.image.target_x = {ext: x}
-        node.image.target_y = {ext: y}
-        node.image.target_r = {ext: node_r}
-        node.image.colour = {ext: 'blue'}
+        node.image.x = {val: x}
+        node.image.y = {val: y}
+        node.image.r = {val: 0}
+        node.image.target_x = {val: x}
+        node.image.target_y = {val: y}
+        node.image.target_r = {val: node_r}
+        node.image.colour = {val: 'blue'}
 
-        node.image.value_img.x = {ext: x}
-        node.image.value_img.y = {ext: y}
-        node.image.value_img.target_x = {ext: x}
-        node.image.value_img.target_y = {ext: y}
-        node.image.value_img.value = {ext: node.value}
-        node.image.value_img.colour = {ext: 'black'}
+        node.image.value_img.x = {val: x}
+        node.image.value_img.y = {val: y}
+        node.image.value_img.target_x = {val: x}
+        node.image.value_img.target_y = {val: y}
+        node.image.value_img.value = {val: node.value}
+        node.image.value_img.colour = {val: 'black'}
 
-        node.image.depth_img.x = {ext: x}
-        node.image.depth_img.y = {ext: y}
-        node.image.depth_img.target_x = {ext: x}
-        node.image.depth_img.target_y = {ext: y}
-        node.image.depth_img.value = {ext: node.depth}
-        node.image.depth_img.colour = {ext: 'black'}
+        node.image.depth_img.x = {val: x}
+        node.image.depth_img.y = {val: y}
+        node.image.depth_img.target_x = {val: x}
+        node.image.depth_img.target_y = {val: y}
+        node.image.depth_img.value = {val: node.depth}
+        node.image.depth_img.colour = {val: 'black'}
 
         node.image.edge_img.child = node
         node.image.edge_img.parent = node.parent
         node.image.edge_img.target = node.parent
-        node.image.edge_img.x = {ext: x}
-        node.image.edge_img.y = {ext: y}
-        node.image.edge_img.colour = {ext: '#c0c0c0'}
+        node.image.edge_img.x = {val: x}
+        node.image.edge_img.y = {val: y}
+        node.image.edge_img.colour = {val: '#c0c0c0'}
 
         x += dist_x
         x = this.update_all(node.right, x, y + dist_y)
@@ -156,16 +156,16 @@ class tree_image {
     add_target() {
         sequence.push(new Set())
         this.update()
-        t.push(speed)
+        t.push(n_steps)
     }
 
-    draw_edges(node=this.tree.root) {
+    #draw_edges(node=this.tree.root) {
         if (node.value === null) {
             return
         }
         node.image.edge_img.draw()
-        this.draw_edges(node.left)
-        this.draw_edges(node.right)
+        this.#draw_edges(node.left)
+        this.#draw_edges(node.right)
     }
 
     draw(node=this.tree.root) {
@@ -173,7 +173,7 @@ class tree_image {
             return
         }
         if (node === this.tree.root) {
-            this.draw_edges()
+            this.#draw_edges()
             this.extra_value.draw()
             this.extra_depth1.draw()
             this.extra_depth2.draw()
@@ -188,13 +188,13 @@ class tree_image {
 class node_image {
     constructor(object, x, y) {
         this.object = object
-        this.x = {ext: x}
-        this.y = {ext: y}
-        this.r = {ext: 0}
-        this.target_x = {ext: x}
-        this.target_y = {ext: y}
-        this.target_r = {ext: 0}
-        this.colour = {ext: 'red'}
+        this.x = {val: x}
+        this.y = {val: y}
+        this.r = {val: 0}
+        this.target_x = {val: x}
+        this.target_y = {val: y}
+        this.target_r = {val: 0}
+        this.colour = {val: 'red'}
         this.edge_img = new edge_image(object, object.parent)
         this.value_img = new value_image(object.value, x, y, object)
         this.depth_img = new value_image(0, x, y, object, '15px Arial')
@@ -203,25 +203,25 @@ class node_image {
 
     update(params) {
         if ('x' in params) {
-            this.x.ext = params.x.ext
+            this.x.val = params.x.val
         }
         if ('y' in params) {
-            this.y.ext = params.y.ext
+            this.y.val = params.y.val
         }
         if ('r' in params) {
-            this.r.ext = params.r.ext
+            this.r.val = params.r.val
         }
         if ('t_x' in params) {
-            this.target_x.ext = params.t_x.ext
+            this.target_x.val = params.t_x.val
         }
         if ('t_y' in params) {
-            this.target_y.ext = params.t_y.ext
+            this.target_y.val = params.t_y.val
         }
         if ('t_r' in params) {
-            this.target_r.ext = params.t_r.ext
+            this.target_r.val = params.t_r.val
         }
         if ('colour' in params) {
-            this.colour.ext = params.colour.ext
+            this.colour.val = params.colour.val
         }
 
         // this.value_img.update({t_x: params.t_x, t_y: params.t_y})
@@ -229,30 +229,30 @@ class node_image {
     }
 
     move() {
-        this.x.ext += (this.target_x.ext - this.x.ext) / t[0]
-        this.y.ext += (this.target_y.ext - this.y.ext) / t[0]
-        this.r.ext += (this.target_r.ext - this.r.ext) / t[0]
+        this.x.val += (this.target_x.val - this.x.val) / t[0]
+        this.y.val += (this.target_y.val - this.y.val) / t[0]
+        this.r.val += (this.target_r.val - this.r.val) / t[0]
         this.value_img.update_coords()
         this.depth_img.update_coords()
-        if (this.target_x.ext !== this.x.ext || this.target_y.ext !== this.y.ext) {
+        if (this.target_x.val !== this.x.val || this.target_y.val !== this.y.val) {
             this.edge_img.update_coords()
         }
     }
 
     draw() {
-        if (this.r.ext > 0) {
+        if (this.r.val > 0) {
             this.depth_img.draw()
         }
 
         ctx.beginPath()
         ctx.lineWidth = 10
-        ctx.strokeStyle = this.colour.ext
+        ctx.strokeStyle = this.colour.val
         ctx.fillStyle = 'white'
-        ctx.arc(this.x.ext, this.y.ext, this.r.ext, 0, 2 * Math.PI)
+        ctx.arc(this.x.val, this.y.val, this.r.val, 0, 2 * Math.PI)
         ctx.stroke()
         ctx.fill()
 
-        if (this.r.ext > 0) {
+        if (this.r.val > 0) {
             this.value_img.draw()
         }
     }
@@ -262,59 +262,59 @@ class node_image {
 class value_image {
     constructor(value, x, y, object, font='25px Arial') {
         this.object = object
-        this.x = {ext: x}
-        this.y = {ext: y}
-        this.target_x = {ext: x}
-        this.target_y = {ext: y}
-        this.value = {ext: value}
-        this.font = {ext: font}
-        this.colour = {ext: 'black'}
+        this.x = {val: x}
+        this.y = {val: y}
+        this.target_x = {val: x}
+        this.target_y = {val: y}
+        this.value = {val: value}
+        this.font = {val: font}
+        this.colour = {val: 'black'}
         objects.add(this)
     }
 
     update_coords() {
-        this.target_x.ext = this.object.image.target_x.ext
-        this.target_y.ext = this.object.image.target_y.ext
-        if (this.font.ext !== '25px Arial') {
-            this.target_y.ext += this.object.image.r.ext + 15
+        this.target_x.val = this.object.image.target_x.val
+        this.target_y.val = this.object.image.target_y.val
+        if (this.font.val !== '25px Arial') {
+            this.target_y.val += this.object.image.r.val + 15
         }
     }
 
     update(params) {
         if ('x' in params) {
-            this.x.ext = params.x.ext
+            this.x.val = params.x.val
         }
         if ('y' in params) {
-            this.y.ext = params.y.ext
+            this.y.val = params.y.val
         }
         if ('t_x' in params) {
-            this.target_x.ext = params.t_x.ext
+            this.target_x.val = params.t_x.val
         }
         if ('t_y' in params) {
-            this.target_y.ext = params.t_y.ext
+            this.target_y.val = params.t_y.val
         }
         if ('value' in params) {
-            this.value.ext = params.value.ext
+            this.value.val = params.value.val
         }
         if ('font' in params) {
-            this.font.ext = params.font.ext
+            this.font.val = params.font.val
         }
         if ('colour' in params) {
-            this.colour.ext = params.colour.ext
+            this.colour.val = params.colour.val
         }
     }
 
     move() {
-        this.x.ext += (this.target_x.ext - this.x.ext) / t[0]
-        this.y.ext += (this.target_y.ext - this.y.ext) / t[0]
+        this.x.val += (this.target_x.val - this.x.val) / t[0]
+        this.y.val += (this.target_y.val - this.y.val) / t[0]
     }
 
     draw() {
-        ctx.fillStyle = this.colour.ext
+        ctx.fillStyle = this.colour.val
         ctx.textBaseline = "middle"
         ctx.textAlign = "center"
-        ctx.font = this.font.ext
-        ctx.fillText(this.value.ext, this.x.ext, this.y.ext)
+        ctx.font = this.font.val
+        ctx.fillText(this.value.val, this.x.val, this.y.val)
     }
 }
 
@@ -324,18 +324,18 @@ class edge_image {
         this.child = child
         this.parent = parent
         this.target = parent
-        this.colour = {ext: '#c0c0c0'}
+        this.colour = {val: '#c0c0c0'}
         this.update_coords()
         objects.add(this)
     }
 
     update_coords() {
         if (this.target !== null) {
-            this.x = {ext: this.target.image.x.ext}
-            this.y = {ext: this.target.image.y.ext}
+            this.x = {val: this.target.image.x.val}
+            this.y = {val: this.target.image.y.val}
         } else {
-            this.x = {ext: canvas.width / 2}
-            this.y = {ext: 100}
+            this.x = {val: canvas.width / 2}
+            this.y = {val: 100}
         }
     }
 
@@ -350,20 +350,20 @@ class edge_image {
             this.target = params.target
         }
         if ('colour' in params) {
-            this.colour.ext = params.colour.ext
+            this.colour.val = params.colour.val
         }
         if ('x' in params) {
-            this.x.ext = params.x.ext
+            this.x.val = params.x.val
         }
         if ('y' in params) {
-            this.y.ext = params.y.ext
+            this.y.val = params.y.val
         }
     }
 
     move() {
         if (this.target !== null) {
-            this.x.ext += (this.target.image.x.ext - this.x.ext) / t[0]
-            this.y.ext += (this.target.image.y.ext - this.y.ext) / t[0]
+            this.x.val += (this.target.image.x.val - this.x.val) / t[0]
+            this.y.val += (this.target.image.y.val - this.y.val) / t[0]
         }
     }
 
@@ -371,9 +371,9 @@ class edge_image {
         if (this.parent !== null) {
             ctx.beginPath()
             ctx.lineWidth = 5
-            ctx.strokeStyle = this.colour.ext
-            ctx.moveTo(this.child.image.x.ext, this.child.image.y.ext)
-            ctx.lineTo(this.x.ext, this.y.ext)
+            ctx.strokeStyle = this.colour.val
+            ctx.moveTo(this.child.image.x.val, this.child.image.y.val)
+            ctx.lineTo(this.x.val, this.y.val)
             ctx.stroke()
         }
     }
@@ -382,36 +382,36 @@ class edge_image {
 
 function comparsion(node, value, pred) {
     sequence.push(new Set([
-        {obj: tree_img.extra_value, args: {t_x: node.image.x, t_y: {ext: node.image.y.ext - node.image.r.ext - 35}, value: {ext: value + pred + node.value}}},
-        {obj: node.image, args: {colour: {ext: 'red'}, t_r: {ext: 2 * node_r}}}
+        {obj: tree_img.extra_value, args: {t_x: node.image.x, t_y: {val: node.image.y.val - node.image.r.val - 35}, value: {val: value + pred + node.value}}},
+        {obj: node.image, args: {colour: {val: 'red'}, t_r: {val: 2 * node_r}}}
     ]))
-    t.push(speed)
+    t.push(n_steps)
     sequence.push(new Set([
         {obj: tree_img.extra_value, args: {}}
     ]))
-    t.push(speed)
+    t.push(n_steps)
     sequence.push(new Set([
         {obj: tree_img.extra_value, args: {t_x: node.image.x, t_y: node.image.y}}
     ]))
-    t.push(speed)
+    t.push(n_steps)
     sequence.push(new Set([
-        {obj: tree_img.extra_value, args: {value: {ext: value}}},
-        {obj: node.image, args: {colour: {ext: 'orange'}, t_r: {ext: node_r}}}
+        {obj: tree_img.extra_value, args: {value: {val: value}}},
+        {obj: node.image, args: {colour: {val: 'orange'}, t_r: {val: node_r}}}
     ]))
-    t.push(speed)
+    t.push(n_steps)
 }
 
 function balancing_draw(node) {
     if (node.left.depth > 0 || node.right.depth > 0) {
         sequence.push(new Set())
-        t.push(speed)
+        t.push(n_steps)
     }
     if (node.left.depth > 0) {
         sequence[sequence.length - 1].add(
             {obj: tree_img.extra_depth1, args: {
                     x: node.left.image.depth_img.x, y: node.left.image.depth_img.y,
                     t_x: node.image.depth_img.x, t_y: node.left.image.depth_img.y,
-                    value: {ext: node.left.depth}
+                    value: {val: node.left.depth}
                 }}
         )
     }
@@ -420,7 +420,7 @@ function balancing_draw(node) {
             {obj: tree_img.extra_depth2, args: {
                     x: node.right.image.depth_img.x, y: node.right.image.depth_img.y,
                     t_x: node.image.depth_img.x, t_y: node.right.image.depth_img.y,
-                    value: {ext: node.right.depth}
+                    value: {val: node.right.depth}
                 }}
         )
     }
@@ -432,127 +432,127 @@ function balancing_draw(node) {
             {obj: tree_img.extra_depth2, args: {
                     x: node.image.depth_img.x, y: node.right.image.depth_img.y,
                     t_x: node.image.depth_img.x, t_y: node.right.image.depth_img.y,
-                    value: {ext: '|' + node.left.depth + '-' + node.right.depth + '|=' + Math.abs(node.right.depth - node.left.depth)}
+                    value: {val: '|' + node.left.depth + '-' + node.right.depth + '|=' + Math.abs(node.right.depth - node.left.depth)}
                 }}
         ]))
-        t.push(speed)
+        t.push(n_steps)
     } else if (node.left.depth > 0) {
         sequence.push(new Set([
             {obj: tree_img.extra_depth1, args: {
                     x: node.image.depth_img.x, y: node.left.image.depth_img.y,
                     t_x: node.image.depth_img.x, t_y: node.left.image.depth_img.y,
-                    value: {ext: '|' + node.left.depth + '-' + node.right.depth + '|=' + Math.abs(node.right.depth - node.left.depth)}
+                    value: {val: '|' + node.left.depth + '-' + node.right.depth + '|=' + Math.abs(node.right.depth - node.left.depth)}
                 }}
         ]))
-        t.push(speed)
+        t.push(n_steps)
     }
 
     sequence.push(new Set())
     if (node.right.depth - node.left.depth > 1) {
         if (node.left.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {ext: 'red'}}})
+            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {val: 'red'}}})
         }
         if (node.right.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {ext: 'red'}}})
+            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {val: 'red'}}})
         }
         if (node.right.left.depth > node.right.right.depth) {
             if (node.right.left.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.right.left.image.depth_img, args: {colour: {ext: 'red'}}})
+                sequence[sequence.length - 1].add({obj: node.right.left.image.depth_img, args: {colour: {val: 'red'}}})
             }
             if (node.right.right.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.right.right.image.depth_img, args: {colour: {ext: 'red'}}})
+                sequence[sequence.length - 1].add({obj: node.right.right.image.depth_img, args: {colour: {val: 'red'}}})
             }
         } else {
             if (node.right.left.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.right.left.image.depth_img, args: {colour: {ext: '#00d000'}}})
+                sequence[sequence.length - 1].add({obj: node.right.left.image.depth_img, args: {colour: {val: '#00d000'}}})
             }
             if (node.right.right.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.right.right.image.depth_img, args: {colour: {ext: '#00d000'}}})
+                sequence[sequence.length - 1].add({obj: node.right.right.image.depth_img, args: {colour: {val: '#00d000'}}})
             }
         }
     } else if (node.left.depth - node.right.depth > 1) {
         if (node.right.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {ext: 'red'}}})
+            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {val: 'red'}}})
         }
         if (node.left.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {ext: 'red'}}})
+            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {val: 'red'}}})
         }
         if (node.left.right.depth > node.left.left.depth) {
             if (node.left.right.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.left.right.image.depth_img, args: {colour: {ext: 'red'}}})
+                sequence[sequence.length - 1].add({obj: node.left.right.image.depth_img, args: {colour: {val: 'red'}}})
             }
             if (node.left.left.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.left.left.image.depth_img, args: {colour: {ext: 'red'}}})
+                sequence[sequence.length - 1].add({obj: node.left.left.image.depth_img, args: {colour: {val: 'red'}}})
             }
         } else {
             if (node.left.right.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.left.right.image.depth_img, args: {colour: {ext: '#00d000'}}})
+                sequence[sequence.length - 1].add({obj: node.left.right.image.depth_img, args: {colour: {val: '#00d000'}}})
             }
             if (node.left.left.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.left.left.image.depth_img, args: {colour: {ext: '#00d000'}}})
+                sequence[sequence.length - 1].add({obj: node.left.left.image.depth_img, args: {colour: {val: '#00d000'}}})
             }
         }
     } else {
         if (node.left.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {ext: '#00d000'}}})
+            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {val: '#00d000'}}})
         }
         if (node.right.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {ext: '#00d000'}}})
+            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {val: '#00d000'}}})
         }
     }
-    t.push(speed * 2.5)
+    t.push(n_steps * 2.5)
 
     sequence.push(new Set())
     if (node.right.depth - node.left.depth > 1) {
         if (node.left.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {ext: 'black'}}})
+            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {val: 'black'}}})
         }
         if (node.right.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {ext: 'black'}}})
+            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {val: 'black'}}})
         }
         if (node.right.left.depth > node.right.right.depth) {
             if (node.right.left.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.right.left.image.depth_img, args: {colour: {ext: 'black'}}})
+                sequence[sequence.length - 1].add({obj: node.right.left.image.depth_img, args: {colour: {val: 'black'}}})
             }
             if (node.right.right.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.right.right.image.depth_img, args: {colour: {ext: 'black'}}})
+                sequence[sequence.length - 1].add({obj: node.right.right.image.depth_img, args: {colour: {val: 'black'}}})
             }
         } else {
             if (node.right.left.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.right.left.image.depth_img, args: {colour: {ext: 'black'}}})
+                sequence[sequence.length - 1].add({obj: node.right.left.image.depth_img, args: {colour: {val: 'black'}}})
             }
             if (node.right.right.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.right.right.image.depth_img, args: {colour: {ext: 'black'}}})
+                sequence[sequence.length - 1].add({obj: node.right.right.image.depth_img, args: {colour: {val: 'black'}}})
             }
         }
     } else if (node.left.depth - node.right.depth > 1) {
         if (node.right.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {ext: 'black'}}})
+            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {val: 'black'}}})
         }
         if (node.left.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {ext: 'black'}}})
+            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {val: 'black'}}})
         }
         if (node.left.right.depth > node.left.left.depth) {
             if (node.left.right.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.left.right.image.depth_img, args: {colour: {ext: 'black'}}})
+                sequence[sequence.length - 1].add({obj: node.left.right.image.depth_img, args: {colour: {val: 'black'}}})
             }
             if (node.left.left.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.left.left.image.depth_img, args: {colour: {ext: 'black'}}})
+                sequence[sequence.length - 1].add({obj: node.left.left.image.depth_img, args: {colour: {val: 'black'}}})
             }
         } else {
             if (node.left.right.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.left.right.image.depth_img, args: {colour: {ext: 'black'}}})
+                sequence[sequence.length - 1].add({obj: node.left.right.image.depth_img, args: {colour: {val: 'black'}}})
             }
             if (node.left.left.image !== null) {
-                sequence[sequence.length - 1].add({obj: node.left.left.image.depth_img, args: {colour: {ext: 'black'}}})
+                sequence[sequence.length - 1].add({obj: node.left.left.image.depth_img, args: {colour: {val: 'black'}}})
             }
         }
     } else {
         if (node.left.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {ext: 'black'}}})
+            sequence[sequence.length - 1].add({obj: node.left.image.depth_img, args: {colour: {val: 'black'}}})
         }
         if (node.right.image !== null) {
-            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {ext: 'black'}}})
+            sequence[sequence.length - 1].add({obj: node.right.image.depth_img, args: {colour: {val: 'black'}}})
         }
     }
     t.push(0)
@@ -563,7 +563,7 @@ function balancing_draw(node) {
 
 function remove_extra(obj) {
     sequence.push(new Set([
-        {obj: obj, args: {x: {ext: -1000}, y: {ext: -1000}, t_x: {ext: -1000}, t_y: {ext: -1000}}}
+        {obj: obj, args: {x: {val: -1000}, y: {val: -1000}, t_x: {val: -1000}, t_y: {val: -1000}}}
     ]))
     t.push(0)
 }
@@ -632,12 +632,12 @@ function remove_node(params) {
 
     while (node !== null) {
         sequence.push(new Set([
-            {obj: node.image, args: {colour: {ext: 'red'}}}
+            {obj: node.image, args: {colour: {val: 'red'}}}
         ]))
         t.push(0)
         params.obj.balancing(node)
         sequence.push(new Set([
-            {obj: node.image, args: {colour: {ext: 'blue'}}}
+            {obj: node.image, args: {colour: {val: 'blue'}}}
         ]))
         t.push(0)
         node = node.parent
@@ -665,17 +665,17 @@ class AVL {
         tree_img = new tree_image(this)
     }
 
-    count_depth(node) {
+    #count_depth(node) {
         if (node.left.depth > 0 || node.right.depth > 0) {
             sequence.push(new Set())
-            t.push(speed)
+            t.push(n_steps)
         }
         if (node.left.depth > 0) {
             sequence[sequence.length - 1].add(
                 {obj: tree_img.extra_depth1, args: {
                         x: node.left.image.depth_img.x, y: node.left.image.depth_img.y,
                         t_x: node.image.depth_img.x, t_y: node.image.depth_img.y,
-                        value: {ext: node.left.depth}
+                        value: {val: node.left.depth}
                     }}
             )
         }
@@ -684,7 +684,7 @@ class AVL {
                 {obj: tree_img.extra_depth2, args: {
                         x: node.right.image.depth_img.x, y: node.right.image.depth_img.y,
                         t_x: node.image.depth_img.x, t_y: node.image.depth_img.y,
-                        value: {ext: node.right.depth}
+                        value: {val: node.right.depth}
                     }}
             )
         }
@@ -694,36 +694,36 @@ class AVL {
         node.depth = Math.max(node.left.depth, node.right.depth) + 1
 
         sequence.push(new Set([
-            {obj: node.image.depth_img, args: {value: {ext: ''}}}
+            {obj: node.image.depth_img, args: {value: {val: ''}}}
         ]))
         t.push(0)
         sequence.push(new Set([
             {obj: tree_img.extra_depth2, args: {
                     x: node.image.depth_img.x, y: node.image.depth_img.y,
                     t_x: node.image.depth_img.x, t_y: node.image.depth_img.y,
-                    value: {ext: 'max+1'}
+                    value: {val: 'max+1'}
                 }}
         ]))
-        t.push(speed)
+        t.push(n_steps)
         sequence.push(new Set([
             {obj: tree_img.extra_depth2, args: {t_y: node.image.y}}
         ]))
-        t.push(speed)
+        t.push(n_steps)
         remove_extra(tree_img.extra_depth2)
         sequence.push(new Set([
-            {obj: node.image.depth_img, args: {y: node.image.y, value: {ext: node.depth}}}
+            {obj: node.image.depth_img, args: {y: node.image.y, value: {val: node.depth}}}
         ]))
-        t.push(speed)
+        t.push(n_steps)
     }
 
-    left_rotation(node) {
+    #left_rotation(node) {
         sequence.push(new Set())
         sequence[sequence.length - 1].add({obj: node.image.edge_img, args: {target: node}})
         sequence[sequence.length - 1].add({obj: node.right.image.edge_img, args: {target: node.right}})
         if (node.right.left.image !== null) {
             sequence[sequence.length - 1].add({obj: node.right.left.image.edge_img, args: {target: node.right.left}})
         }
-        t.push(speed)
+        t.push(n_steps)
 
         if (node.parent !== null) {
             if (node.side < 0) {
@@ -748,26 +748,26 @@ class AVL {
         tree_img.add_target()
         sequence.push(new Set())
         sequence[sequence.length - 1].add({obj: node.image.edge_img, args: {target: node.parent, parent: node.parent}})
-        sequence[sequence.length - 1].add({obj: node.parent.image, args: {colour: {ext: 'orange'}}})
+        sequence[sequence.length - 1].add({obj: node.parent.image, args: {colour: {val: 'orange'}}})
         if (node.parent.parent !== null) {
             sequence[sequence.length - 1].add({obj: node.parent.image.edge_img, args: {target: node.parent.parent}})
         }
         if (node.right.image !== null) {
             sequence[sequence.length - 1].add({obj: node.right.image.edge_img, args: {target: node}})
         }
-        t.push(speed)
+        t.push(n_steps)
 
-        this.count_depth(node)
+        this.#count_depth(node)
     }
 
-    right_rotation(node) {
+    #right_rotation(node) {
         sequence.push(new Set())
         sequence[sequence.length - 1].add({obj: node.image.edge_img, args: {target: node}})
         sequence[sequence.length - 1].add({obj: node.left.image.edge_img, args: {target: node.left}})
         if (node.left.right.image !== null) {
             sequence[sequence.length - 1].add({obj: node.left.right.image.edge_img, args: {target: node.left.right}})
         }
-        t.push(speed)
+        t.push(n_steps)
 
         if (node.parent !== null) {
             if (node.side < 0) {
@@ -792,54 +792,54 @@ class AVL {
         tree_img.add_target()
         sequence.push(new Set())
         sequence[sequence.length - 1].add({obj: node.image.edge_img, args: {target: node.parent, parent: node.parent}})
-        sequence[sequence.length - 1].add({obj: node.parent.image, args: {colour: {ext: 'orange'}}})
+        sequence[sequence.length - 1].add({obj: node.parent.image, args: {colour: {val: 'orange'}}})
         if (node.parent.parent !== null) {
             sequence[sequence.length - 1].add({obj: node.parent.image.edge_img, args: {target: node.parent.parent}})
         }
         if (node.left.image !== null) {
             sequence[sequence.length - 1].add({obj: node.left.image.edge_img, args: {target: node}})
         }
-        t.push(speed)
+        t.push(n_steps)
 
-        this.count_depth(node)
+        this.#count_depth(node)
     }
 
-    big_left_rotation(node) {
-        this.right_rotation(node.right)
-        this.left_rotation(node)
+    #big_left_rotation(node) {
+        this.#right_rotation(node.right)
+        this.#left_rotation(node)
     }
 
-    big_right_rotation(node) {
-        this.left_rotation(node.left)
-        this.right_rotation(node)
+    #big_right_rotation(node) {
+        this.#left_rotation(node.left)
+        this.#right_rotation(node)
     }
 
     balancing(node) {
         balancing_draw(node)
         if (node.right.depth - node.left.depth > 1 && node.right.left.depth > node.right.right.depth) {
-            this.big_left_rotation(node)
+            this.#big_left_rotation(node)
         } else if (node.right.depth - node.left.depth > 1) {
-            this.left_rotation(node)
+            this.#left_rotation(node)
         } else if (node.left.depth - node.right.depth > 1 && node.left.right.depth > node.left.left.depth) {
-            this.big_right_rotation(node)
+            this.#big_right_rotation(node)
         } else if (node.left.depth - node.right.depth > 1) {
-            this.right_rotation(node)
+            this.#right_rotation(node)
         } else {
-            this.count_depth(node)
+            this.#count_depth(node)
         }
     }
 
     insert(value, obj=this) {
         let node = obj.root
         sequence.push(new Set([
-            {obj: tree_img.extra_value, args: {x: {ext: canvas.width / 2}, y: {ext: 50}, t_x: {ext: canvas.width / 2}, t_y: {ext: 50}, value: {ext: value}}}
+            {obj: tree_img.extra_value, args: {x: {val: canvas.width / 2}, y: {val: 50}, t_x: {val: canvas.width / 2}, t_y: {val: 50}, value: {val: value}}}
         ]))
         t.push(0)
         while (node.value !== null) {
             sequence.push(new Set([
                 {obj: tree_img.extra_value, args: {t_x: node.image.x, t_y: node.image.y}},
             ]))
-            t.push(speed)
+            t.push(n_steps)
             // sequence.push(new Set([{obj: node.image, args: {t_r: 2 * node_r}}]))
             // t.push(10)
             if (node.value > value) {
@@ -852,7 +852,7 @@ class AVL {
                 comparsion(node, value, '=')
                 while (node !== null) {
                     sequence.push(new Set([
-                        {obj: node.image, args: {colour: {ext: 'blue'}}}
+                        {obj: node.image, args: {colour: {val: 'blue'}}}
                     ]))
                     t.push(0)
                     node = node.parent
@@ -870,7 +870,7 @@ class AVL {
         obj.size += 1
 
         if (node.parent !== null) {
-            node.image = new node_image(node, node.parent.image.x.ext, node.parent.image.y.ext)
+            node.image = new node_image(node, node.parent.image.x.val, node.parent.image.y.val)
         } else {
             node.image = new node_image(node, canvas.width / 2, 100)
         }
@@ -878,12 +878,12 @@ class AVL {
 
         while (node !== null) {
             sequence.push(new Set([
-                {obj: node.image, args: {colour: {ext: 'red'}}}
+                {obj: node.image, args: {colour: {val: 'red'}}}
             ]))
             t.push(0)
             obj.balancing(node)
             sequence.push(new Set([
-                {obj: node.image, args: {colour: {ext: 'blue'}}}
+                {obj: node.image, args: {colour: {val: 'blue'}}}
             ]))
             t.push(0)
             node = node.parent
@@ -896,14 +896,14 @@ class AVL {
     remove(value, obj=this) {
         let node = obj.root
         sequence.push(new Set([
-            {obj: tree_img.extra_value, args: {x: {ext: canvas.width / 2}, y: {ext: 50}, t_x: {ext: canvas.width / 2}, t_y: {ext: 50}, value: {ext: value}}}
+            {obj: tree_img.extra_value, args: {x: {val: canvas.width / 2}, y: {val: 50}, t_x: {val: canvas.width / 2}, t_y: {val: 50}, value: {val: value}}}
         ]))
         t.push(0)
         while (node.value !== null) {
             sequence.push(new Set([
                 {obj: tree_img.extra_value, args: {t_x: node.image.x, t_y: node.image.y}},
             ]))
-            t.push(speed)
+            t.push(n_steps)
             if (node.value > value) {
                 comparsion(node, value, '<')
                 node = node.left
@@ -913,10 +913,11 @@ class AVL {
             } else {
                 comparsion(node, value, '=')
                 sequence.push(new Set([
-                    {obj: node.image, args: {colour: {ext: 'green'}}},
-                    {obj: node.image.value_img, args: {value: {ext: ''}}}
+                    {obj: node.image, args: {colour: {val: 'green'}}},
+                    {obj: node.image.value_img, args: {value: {val: ''}}}
                 ]))
                 t.push(0)
+                obj.size -= 1
                 break
             }
         }
@@ -924,7 +925,7 @@ class AVL {
         if (node.value === null) {
             while (node !== null) {
                 sequence.push(new Set([
-                    {obj: node.image, args: {colour: {ext: 'blue'}}}
+                    {obj: node.image, args: {colour: {val: 'blue'}}}
                 ]))
                 t.push(0)
                 node = node.parent
@@ -936,50 +937,50 @@ class AVL {
         if (node.left.depth === 0 && node.right.depth === 0) {
             sequence.push(new Set())
             sequence[sequence.length - 1].add({obj: node.image.edge_img, args: {target: node}})
-            t.push(speed)
+            t.push(n_steps)
             sequence.push(new Set([
-                {obj: node.image, args: {t_r: {ext: 0}}}
+                {obj: node.image, args: {t_r: {val: 0}}}
             ]))
-            t.push(speed)
+            t.push(n_steps)
             sequence.push(new Set([{obj: remove_node, args: {node: node, side: 0, obj: obj}}]))
             t.push(0)
         } else if (node.left.depth > node.right.depth) {
             node = node.left
             sequence.push(new Set([
-                {obj: node.image, args: {colour: {ext: 'red'}}}
+                {obj: node.image, args: {colour: {val: 'red'}}}
             ]))
-            t.push(speed)
+            t.push(n_steps)
             while (node.right.value !== null) {
                 node = node.right
                 sequence.push(new Set([
-                    {obj: node.image, args: {colour: {ext: 'red'}}},
-                    {obj: node.parent.image, args: {colour: {ext: 'orange'}}}
+                    {obj: node.image, args: {colour: {val: 'red'}}},
+                    {obj: node.parent.image, args: {colour: {val: 'orange'}}}
                 ]))
-                t.push(speed)
+                t.push(n_steps)
             }
             sequence.push(new Set())
             sequence[sequence.length - 1].add({obj: node.image.edge_img, args: {target: node}})
             if (node.left.value !== null) {
                 sequence[sequence.length - 1].add({obj: node.left.image.edge_img, args: {target: node.left}})
             }
-            t.push(speed)
+            t.push(n_steps)
             sequence.push(new Set([
-                {obj: node.image, args: {t_r: {ext: 0}}},
-                {obj: node.image.value_img, args: {value: {ext: ''}}},
+                {obj: node.image, args: {t_r: {val: 0}}},
+                {obj: node.image.value_img, args: {value: {val: ''}}},
                 {obj: deleted.image.value_img, args: {
                         x: node.image.value_img.x, y: node.image.value_img.y,
                         t_x: deleted.image.value_img.x, t_y: deleted.image.value_img.y,
-                        value: {ext: node.value}
-                }}
+                        value: {val: node.value}
+                    }}
             ]))
-            t.push(speed)
+            t.push(n_steps)
             if (node.left.value !== null) {
                 sequence.push(new Set())
                 sequence[sequence.length - 1].add({
                     obj: node.left.image.edge_img,
                     args: {target: node.parent, parent: node.parent}
                 })
-                t.push(speed)
+                t.push(n_steps)
             }
             if (node.side !== -1) {
                 sequence.push(new Set([{obj: remove_node, args: {node: node, side: 1, obj: obj}}]))
@@ -990,40 +991,40 @@ class AVL {
         } else {
             node = node.right
             sequence.push(new Set([
-                {obj: node.image, args: {colour: {ext: 'red'}}}
+                {obj: node.image, args: {colour: {val: 'red'}}}
             ]))
-            t.push(speed)
+            t.push(n_steps)
             while (node.left.value !== null) {
                 node = node.left
                 sequence.push(new Set([
-                    {obj: node.image, args: {colour: {ext: 'red'}}},
-                    {obj: node.parent.image, args: {colour: {ext: 'orange'}}}
+                    {obj: node.image, args: {colour: {val: 'red'}}},
+                    {obj: node.parent.image, args: {colour: {val: 'orange'}}}
                 ]))
-                t.push(speed)
+                t.push(n_steps)
             }
             sequence.push(new Set())
             sequence[sequence.length - 1].add({obj: node.image.edge_img, args: {target: node}})
             if (node.right.value !== null) {
                 sequence[sequence.length - 1].add({obj: node.right.image.edge_img, args: {target: node.right}})
             }
-            t.push(speed)
+            t.push(n_steps)
             sequence.push(new Set([
-                {obj: node.image, args: {t_r: {ext: 0}}},
-                {obj: node.image.value_img, args: {value: {ext: ''}}},
+                {obj: node.image, args: {t_r: {val: 0}}},
+                {obj: node.image.value_img, args: {value: {val: ''}}},
                 {obj: deleted.image.value_img, args: {
                         x: node.image.value_img.x, y: node.image.value_img.y,
                         t_x: deleted.image.value_img.x, t_y: deleted.image.value_img.y,
-                        value: {ext: node.value}
-                }}
+                        value: {val: node.value}
+                    }}
             ]))
-            t.push(speed)
+            t.push(n_steps)
             if (node.right.value !== null) {
                 sequence.push(new Set())
                 sequence[sequence.length - 1].add({
                     obj: node.right.image.edge_img,
                     args: {target: node.parent, parent: node.parent}
                 })
-                t.push(speed)
+                t.push(n_steps)
             }
             if (node.side !== 1) {
                 sequence.push(new Set([{obj: remove_node, args: {node: node, side: -1, obj: obj}}]))
@@ -1038,14 +1039,14 @@ class AVL {
     search(value, obj=this) {
         let node = obj.root
         sequence.push(new Set([
-            {obj: tree_img.extra_value, args: {x: {ext: canvas.width / 2}, y: {ext: 50}, t_x: {ext: canvas.width / 2}, t_y: {ext: 50}, value: {ext: value}}}
+            {obj: tree_img.extra_value, args: {x: {val: canvas.width / 2}, y: {val: 50}, t_x: {val: canvas.width / 2}, t_y: {val: 50}, value: {val: value}}}
         ]))
         t.push(0)
         while (node.value !== null) {
             sequence.push(new Set([
                 {obj: tree_img.extra_value, args: {t_x: node.image.x, t_y: node.image.y}},
             ]))
-            t.push(speed)
+            t.push(n_steps)
             // sequence.push(new Set([{obj: node.image, args: {t_r: 2 * node_r}}]))
             // t.push(10)
             if (node.value > value) {
@@ -1057,12 +1058,12 @@ class AVL {
             } else {
                 comparsion(node, value, '=')
                 sequence.push(new Set([
-                    {obj: node.image, args: {colour: {ext: 'green'}}}
+                    {obj: node.image, args: {colour: {val: 'green'}}}
                 ]))
-                t.push(speed * 2.5)
+                t.push(n_steps * 2.5)
                 while (node !== null) {
                     sequence.push(new Set([
-                        {obj: node.image, args: {colour: {ext: 'blue'}}}
+                        {obj: node.image, args: {colour: {val: 'blue'}}}
                     ]))
                     t.push(0)
                     node = node.parent
@@ -1074,7 +1075,7 @@ class AVL {
 
         while (node !== null) {
             sequence.push(new Set([
-                {obj: node.image, args: {colour: {ext: 'blue'}}}
+                {obj: node.image, args: {colour: {val: 'blue'}}}
             ]))
             t.push(0)
             node = node.parent

@@ -1,17 +1,17 @@
-let sch1 = document.getElementById('c2')
-let ctx1 = sch1.getContext('2d')
-const width1 = sch1.width
-const height1 = sch1.height
+let sch_b = document.getElementById('c2')
+let ctx_b = sch_b.getContext('2d')
+const width_b = sch_b.width
+const height_b = sch_b.height
 
-let sch2 = document.getElementById('c3')
-let ctx2 = sch2.getContext('2d')
-const width2 = sch2.width
-const height2 = sch2.height
+let sch_u = document.getElementById('c3')
+let ctx_u = sch_u.getContext('2d')
+const width_u = sch_u.width
+const height_u = sch_u.height
 
 const ind = 20
 
 
-class Node_schema {
+class Node_scheme {
     constructor(value, parent, left, right, side) {
         this.value = value
         this.parent = parent
@@ -25,15 +25,16 @@ class Node_schema {
 }
 
 
-class Tree_schema {
+class Tree_scheme {
+    #max_x = 0
+    #max_y = 0
+    #colour = 'black'
     constructor(colour='black') {
-        this.root = new Node_schema(null, null, null, null, null)
         this.size = 0
-        this.max_x = 0
-        this.max_y = 0
+        this.root = new Node_scheme(null, null, null, null, null)
         this.n_leafs = 0
         this.sum = 0
-        this.colour = colour
+        this.#colour = colour
     }
 
     count_depth(node) {
@@ -50,11 +51,11 @@ class Tree_schema {
         }
         node.x = this.coords(node.left, x, y + 1)
         node.y = y
-        if (node.x > this.max_x) {
-            this.max_x = node.x
+        if (node.x > this.#max_x) {
+            this.#max_x = node.x
         }
-        if (node.y > this.max_y) {
-            this.max_y = node.y
+        if (node.y > this.#max_y) {
+            this.#max_y = node.y
         }
         return this.coords(node.right, node.x + 1, y + 1)
     }
@@ -67,23 +68,23 @@ class Tree_schema {
         this.draw(context, w, h, node.right)
         context.beginPath()
         context.lineWidth = 4 / Math.log2(this.size)
-        context.fillStyle = this.colour
-        context.arc(ind + node.x * (w - 2 * ind) / this.max_x, ind + 5 + node.y * (h - 2 * ind) / this.max_y, context.lineWidth, 0, 2 * Math.PI)
+        context.fillStyle = this.#colour
+        context.arc(ind + node.x * (w - 2 * ind) / this.#max_x, ind + 5 + node.y * (h - 2 * ind) / this.#max_y, context.lineWidth, 0, 2 * Math.PI)
         context.stroke()
         context.fill()
         if (node.parent !== null) {
             context.beginPath()
-            context.strokeStyle = this.colour
-            context.moveTo(ind + node.x * (w - 2 * ind) / this.max_x, ind + 5 + node.y * (h - 2 * ind) / this.max_y)
-            context.lineTo(ind + node.parent.x * (w - 2 * ind) / this.max_x, ind + 5 + node.parent.y * (h - 2 * ind) / this.max_y)
+            context.strokeStyle = this.#colour
+            context.moveTo(ind + node.x * (w - 2 * ind) / this.#max_x, ind + 5 + node.y * (h - 2 * ind) / this.#max_y)
+            context.lineTo(ind + node.parent.x * (w - 2 * ind) / this.#max_x, ind + 5 + node.parent.y * (h - 2 * ind) / this.#max_y)
             context.stroke()
         }
     }
 }
 
 
-class Balanced extends Tree_schema {
-    left_rotation(node) {
+class Balanced extends Tree_scheme {
+    #left_rotation(node) {
         if (node.parent !== null) {
             if (node.side < 0) {
                 node.parent.left = node.right
@@ -107,7 +108,7 @@ class Balanced extends Tree_schema {
         this.count_depth(node)
     }
 
-    right_rotation(node) {
+    #right_rotation(node) {
         if (node.parent !== null) {
             if (node.side < 0) {
                 node.parent.left = node.left
@@ -131,25 +132,25 @@ class Balanced extends Tree_schema {
         this.count_depth(node)
     }
 
-    big_left_rotation(node) {
-        this.right_rotation(node.right)
-        this.left_rotation(node)
+    #big_left_rotation(node) {
+        this.#right_rotation(node.right)
+        this.#left_rotation(node)
     }
 
-    big_right_rotation(node) {
-        this.left_rotation(node.left)
-        this.right_rotation(node)
+    #big_right_rotation(node) {
+        this.#left_rotation(node.left)
+        this.#right_rotation(node)
     }
 
-    balancing(node) {
+    #balancing(node) {
         if (node.right.depth - node.left.depth > 1 && node.right.left.depth > node.right.right.depth) {
-            this.big_left_rotation(node)
+            this.#big_left_rotation(node)
         } else if (node.right.depth - node.left.depth > 1) {
-            this.left_rotation(node)
+            this.#left_rotation(node)
         } else if (node.left.depth - node.right.depth > 1 && node.left.right.depth > node.left.left.depth) {
-            this.big_right_rotation(node)
+            this.#big_right_rotation(node)
         } else if (node.left.depth - node.right.depth > 1) {
-            this.right_rotation(node)
+            this.#right_rotation(node)
         } else {
             this.count_depth(node)
         }
@@ -173,14 +174,14 @@ class Balanced extends Tree_schema {
         obj.size += 1
 
         while (node !== null) {
-            obj.balancing(node)
+            obj.#balancing(node)
             node = node.parent
         }
     }
 }
 
 
-class Unbalanced extends Tree_schema {
+class Unbalanced extends Tree_scheme {
     insert(value) {
         let node = this.root
         while (node.value !== null) {
@@ -194,8 +195,8 @@ class Unbalanced extends Tree_schema {
         }
 
         node.value = value
-        node.left = new Node_schema(null, node, null, null, -1)
-        node.right = new Node_schema(null, node, null, null, 1)
+        node.left = new Node_scheme(null, node, null, null, -1)
+        node.right = new Node_scheme(null, node, null, null, 1)
         this.size += 1
 
         while (node !== null) {
@@ -222,7 +223,7 @@ function permutations(array, n) {
 }
 
 
-function create_schema(num=null) {
+function create_scheme(num=null) {
     if (num === null) {
         num = document.getElementById('n_node').value
     }
@@ -248,51 +249,51 @@ function create_schema(num=null) {
     return [tree_b, tree_u]
 }
 
-function draw_schemas() {
+function draw_schemes() {
     graph()
 
-    ctx1.clearRect(0, 0, width1, height1)
-    ctx2.clearRect(0, 0, width2, height2)
+    ctx_b.clearRect(0, 0, width_b, height_b)
+    ctx_u.clearRect(0, 0, width_u, height_u)
 
-    ctx1.fillStyle = 'black'
-    ctx1.textBaseline = "top"
-    ctx1.textAlign = "end"
-    ctx1.font = '15px Arial'
-    ctx1.fillText('AVL', width1 - ind, 10)
+    ctx_b.fillStyle = 'black'
+    ctx_b.textBaseline = "top"
+    ctx_b.textAlign = "end"
+    ctx_b.font = '15px Arial'
+    ctx_b.fillText('AVL', width_b - ind, 10)
 
-    ctx2.fillStyle = 'black'
-    ctx2.textBaseline = "top"
-    ctx2.textAlign = "end"
-    ctx2.font = '15px Arial'
-    ctx2.fillText('unbalanced', width2 - ind, 10)
+    ctx_u.fillStyle = 'black'
+    ctx_u.textBaseline = "top"
+    ctx_u.textAlign = "end"
+    ctx_u.font = '15px Arial'
+    ctx_u.fillText('unbalanced', width_u - ind, 10)
 
-    let trees = create_schema()
-    trees[0].draw(ctx1, width1, height1)
-    trees[1].draw(ctx2, width2, height2)
+    let trees = create_scheme()
+    trees[0].draw(ctx_b, width_b, height_b)
+    trees[1].draw(ctx_u, width_u, height_u)
 
-    ctx1.fillStyle = 'black'
-    ctx1.textBaseline = "top"
-    ctx1.textAlign = "start"
-    ctx1.font = '10px Arial'
-    ctx1.fillText('mean: ' + (trees[0].sum / trees[0].n_leafs).toFixed(2), 10, 10)
-    ctx1.fillText('max: ' + trees[0].root.depth, 10, 20)
+    ctx_b.fillStyle = 'black'
+    ctx_b.textBaseline = "top"
+    ctx_b.textAlign = "start"
+    ctx_b.font = '10px Arial'
+    ctx_b.fillText('mean: ' + (trees[0].sum / trees[0].n_leafs).toFixed(2), 10, 10)
+    ctx_b.fillText('max: ' + trees[0].root.depth, 10, 20)
 
-    ctx2.fillStyle = 'black'
-    ctx2.textBaseline = "top"
-    ctx2.textAlign = "start"
-    ctx2.font = '10px Arial'
-    ctx2.fillText('mean: ' + (trees[1].sum / trees[1].n_leafs).toFixed(2), 10, 10)
-    ctx2.fillText('max: ' + trees[1].root.depth, 10, 20)
+    ctx_u.fillStyle = 'black'
+    ctx_u.textBaseline = "top"
+    ctx_u.textAlign = "start"
+    ctx_u.font = '10px Arial'
+    ctx_u.fillText('mean: ' + (trees[1].sum / trees[1].n_leafs).toFixed(2), 10, 10)
+    ctx_u.fillText('max: ' + trees[1].root.depth, 10, 20)
 }
 
-ctx1.fillStyle = 'black'
-ctx1.textBaseline = "top"
-ctx1.textAlign = "end"
-ctx1.font = '15px Arial'
-ctx1.fillText('AVL', width1 - ind, 10)
+ctx_b.fillStyle = 'black'
+ctx_b.textBaseline = "top"
+ctx_b.textAlign = "end"
+ctx_b.font = '15px Arial'
+ctx_b.fillText('AVL', width_b - ind, 10)
 
-ctx2.fillStyle = 'black'
-ctx2.textBaseline = "top"
-ctx2.textAlign = "end"
-ctx2.font = '15px Arial'
-ctx2.fillText('unbalanced', width2 - ind, 10)
+ctx_u.fillStyle = 'black'
+ctx_u.textBaseline = "top"
+ctx_u.textAlign = "end"
+ctx_u.font = '15px Arial'
+ctx_u.fillText('unbalanced', width_u - ind, 10)
